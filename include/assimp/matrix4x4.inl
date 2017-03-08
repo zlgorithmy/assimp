@@ -95,12 +95,17 @@ aiMatrix4x4t<TReal>::operator aiMatrix4x4t<TOther> () const
 
 // ----------------------------------------------------------------------------------------
 template <typename TReal>
-inline aiMatrix4x4t<TReal>::aiMatrix4x4t (const aiMatrix3x3t<TReal>& m)
+inline aiMatrix4x4t<TReal>::aiMatrix4x4t (const aiMatrix3x3t<TReal>& rhs)
 {
-    a1 = m.a1; a2 = m.a2; a3 = m.a3; a4 = static_cast<TReal>(0.0);
-    b1 = m.b1; b2 = m.b2; b3 = m.b3; b4 = static_cast<TReal>(0.0);
-    c1 = m.c1; c2 = m.c2; c3 = m.c3; c4 = static_cast<TReal>(0.0);
+    a1 = rhs.m[ 0 ].x; a2 = rhs.m[ 0 ].y; a3 = rhs.m[ 0 ].z; a4 = static_cast<TReal>(0.0);
+    b1 = rhs.m[ 1 ].x; b2 = rhs.m[ 1 ].y; b3 = rhs.m[ 1 ].z; b4 = static_cast<TReal>(0.0);
+    c1 = rhs.m[ 2 ].x; c2 = rhs.m[ 2 ].y; c3 = rhs.m[ 2 ].z; c4 = static_cast<TReal>(0.0);
     d1 = static_cast<TReal>(0.0); d2 = static_cast<TReal>(0.0); d3 = static_cast<TReal>(0.0); d4 = static_cast<TReal>(1.0);
+
+/*    a1 = m.a1; a2 = m.a2; a3 = m.a3; a4 = static_cast< TReal >( 0.0 );
+    b1 = m.b1; b2 = m.b2; b3 = m.b3; b4 = static_cast< TReal >( 0.0 );
+    c1 = m.c1; c2 = m.c2; c3 = m.c3; c4 = static_cast< TReal >( 0.0 );
+    d1 = static_cast< TReal >( 0.0 ); d2 = static_cast< TReal >( 0.0 ); d3 = static_cast< TReal >( 0.0 ); d4 = static_cast< TReal >( 1.0 );*/
 }
 
 // ----------------------------------------------------------------------------------------

@@ -47,6 +47,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define AI_MATRIX3X3_H_INC
 
 #include "defs.h"
+#include "vector3.h"
 
 #ifdef __cplusplus
 
@@ -63,22 +64,35 @@ template <typename T> class aiVector2t;
  *  defined thereby.
  */
 template <typename TReal>
-class aiMatrix3x3t
-{
+class aiMatrix3x3t {
 public:
+    typedef aiVector3t<TReal> col_type;
 
-    aiMatrix3x3t () :
+    /*aiMatrix3x3t () :
         a1(static_cast<TReal>(1.0f)), a2(), a3(),
         b1(), b2(static_cast<TReal>(1.0f)), b3(),
-        c1(), c2(), c3(static_cast<TReal>(1.0f)) {}
+        c1(), c2(), c3(static_cast<TReal>(1.0f)) {}*/
+    aiMatrix3x3t() {
+        m[ 0 ] = col_type( static_cast< TReal >( 1.0f ), static_cast< TReal >( 0.0f ), static_cast< TReal >( 0.0f ) );
+        m[ 1 ] = col_type( static_cast< TReal >( 0.0f ), static_cast< TReal >( 1.0f ), static_cast< TReal >( 0.0f ) );
+        m[ 2 ] = col_type( static_cast< TReal >( 0.0f ), static_cast< TReal >( 0.0f ), static_cast< TReal >( 1.0f ) );
+    }
+
+/*    aiMatrix3x3t( TReal _a1, TReal _a2, TReal _a3,
+        TReal _b1, TReal _b2, TReal _b3,
+        TReal _c1, TReal _c2, TReal _c3 ) :
+        a1( _a1 ), a2( _a2 ), a3( _a3 ),
+        b1( _b1 ), b2( _b2 ), b3( _b3 ),
+        c1( _c1 ), c2( _c2 ), c3( _c3 )
+    {}*/
 
     aiMatrix3x3t (  TReal _a1, TReal _a2, TReal _a3,
                     TReal _b1, TReal _b2, TReal _b3,
-                    TReal _c1, TReal _c2, TReal _c3) :
-        a1(_a1), a2(_a2), a3(_a3),
-        b1(_b1), b2(_b2), b3(_b3),
-        c1(_c1), c2(_c2), c3(_c3)
-    {}
+                    TReal _c1, TReal _c2, TReal _c3) {
+        m[ 0 ] = col_type( _a1, _a2, _a3 );
+        m[ 1 ] = col_type( _b1, _b2, _b3 );
+        m[ 2 ] = col_type( _c1, _c2, _c3 );
+    }
 
 public:
 
@@ -161,9 +175,10 @@ public:
         const aiVector3t<TReal>& to, aiMatrix3x3t& out);
 
 public:
-    TReal a1, a2, a3;
+    col_type m[3];
+/*    TReal a1, a2, a3;
     TReal b1, b2, b3;
-    TReal c1, c2, c3;
+    TReal c1, c2, c3;*/
 };
 
 typedef aiMatrix3x3t<ai_real> aiMatrix3x3;

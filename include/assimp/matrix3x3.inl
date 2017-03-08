@@ -59,16 +59,30 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 template <typename TReal>
 inline aiMatrix3x3t<TReal>::aiMatrix3x3t( const aiMatrix4x4t<TReal>& pMatrix)
 {
-    a1 = pMatrix.a1; a2 = pMatrix.a2; a3 = pMatrix.a3;
+    m[ 0 ] = pMatrix.m[ 0 ];
+    m[ 1 ] = pMatrix.m[ 1 ];
+    m[ 2 ] = pMatrix.m[ 2 ];
+    /*a1 = pMatrix.a1; a2 = pMatrix.a2; a3 = pMatrix.a3;
     b1 = pMatrix.b1; b2 = pMatrix.b2; b3 = pMatrix.b3;
-    c1 = pMatrix.c1; c2 = pMatrix.c2; c3 = pMatrix.c3;
+    c1 = pMatrix.c1; c2 = pMatrix.c2; c3 = pMatrix.c3;*/
 }
 
 // ------------------------------------------------------------------------------------------------
 template <typename TReal>
-inline aiMatrix3x3t<TReal>& aiMatrix3x3t<TReal>::operator *= (const aiMatrix3x3t<TReal>& m)
+inline aiMatrix3x3t<TReal>& aiMatrix3x3t<TReal>::operator *= (const aiMatrix3x3t<TReal>& rhs)
 {
-    *this = aiMatrix3x3t<TReal>(m.a1 * a1 + m.b1 * a2 + m.c1 * a3,
+    *this = aiMatrix3x3t<TReal>(
+        rhs.m[ 0 ].x * m[ 0 ].y + rhs.m[ 1 ].x * m[ 0 ].y + rhs.m[ 2 ].x * m[ 0 ].z,
+        rhs.m[ 0 ].y * m[ 0 ].x + rhs.m[ 1 ].y * m[ 0 ].y + rhs.m[ 2 ].y * m[ 0 ].z,
+        rhs.m[ 0 ].z * m[ 0 ].x + rhs.m[ 1 ].z * m[ 0 ].y + rhs.m[ 2 ].z * m[ 0 ].z,
+        rhs.m[ 0 ].x * m[ 1 ].x + rhs.m[ 1 ].x * m[ 1 ].y + rhs.m[ 2 ].x * m[ 1 ].z,
+        rhs.m[ 0 ].y * m[ 1 ].x + rhs.m[ 1 ].y * m[ 1 ].y + rhs.m[ 2 ].y * m[ 1 ].z,
+        rhs.m[ 0 ].z * m[ 1 ].x + rhs.m[ 1 ].z * m[ 1 ].y + rhs.m[ 2 ].z * m[ 1 ].z,
+        rhs.m[ 0 ].x * m[ 2 ].x + rhs.m[ 1 ].x * m[ 2 ].y + rhs.m[ 2 ].x * m[ 2 ].z,
+        rhs.m[ 0 ].y * m[ 2 ].x + rhs.m[ 1 ].y * m[ 2 ].y + rhs.m[ 2 ].y * m[ 2 ].z,
+        rhs.m[ 0 ].z * m[ 2 ].x + rhs.m[ 1 ].z * m[ 2 ].y + rhs.m[ 2 ].z * m[ 2 ].z 
+    );
+/*    *this = aiMatrix3x3t<TReal>(m.a1 * a1 + m.b1 * a2 + m.c1 * a3,
         m.a2 * a1 + m.b2 * a2 + m.c2 * a3,
         m.a3 * a1 + m.b3 * a2 + m.c3 * a3,
         m.a1 * b1 + m.b1 * b2 + m.c1 * b3,
@@ -76,7 +90,7 @@ inline aiMatrix3x3t<TReal>& aiMatrix3x3t<TReal>::operator *= (const aiMatrix3x3t
         m.a3 * b1 + m.b3 * b2 + m.c3 * b3,
         m.a1 * c1 + m.b1 * c2 + m.c1 * c3,
         m.a2 * c1 + m.b2 * c2 + m.c2 * c3,
-        m.a3 * c1 + m.b3 * c2 + m.c3 * c3);
+        m.a3 * c1 + m.b3 * c2 + m.c3 * c3);*/
     return *this;
 }
 
@@ -101,49 +115,35 @@ inline aiMatrix3x3t<TReal> aiMatrix3x3t<TReal>::operator* (const aiMatrix3x3t<TR
 
 // ------------------------------------------------------------------------------------------------
 template <typename TReal>
-inline TReal* aiMatrix3x3t<TReal>::operator[] (unsigned int p_iIndex) {
-    switch ( p_iIndex ) {
-        case 0:
-            return &a1;
-        case 1:
-            return &b1;
-        case 2:
-            return &c1;
-        default:
-            break;
-    }
-    return &a1;
+inline 
+TReal* aiMatrix3x3t<TReal>::operator[] (unsigned int p_iIndex) {
+    return m[ p_iIndex ];
 }
 
 // ------------------------------------------------------------------------------------------------
 template <typename TReal>
-inline const TReal* aiMatrix3x3t<TReal>::operator[] (unsigned int p_iIndex) const {
-    switch ( p_iIndex ) {
-        case 0:
-            return &a1;
-        case 1:
-            return &b1;
-        case 2:
-            return &c1;
-        default:
-            break;
-    }
-    return &a1;
+inline 
+const TReal* aiMatrix3x3t<TReal>::operator[] (unsigned int p_iIndex) const {
+    return m[ p_iIndex ];
 }
 
 // ------------------------------------------------------------------------------------------------
 template <typename TReal>
-inline bool aiMatrix3x3t<TReal>::operator== (const aiMatrix4x4t<TReal>& m) const
-{
-    return a1 == m.a1 && a2 == m.a2 && a3 == m.a3 &&
+inline bool aiMatrix3x3t<TReal>::operator== (const aiMatrix4x4t<TReal>& rhs) const {
+    for ( size_t i = 0; i < 3; i++ ) {
+        if ( m[ i ] != rhs.m[ i ] ) {
+            return false;
+        }
+    }
+    return true;
+    /*return a1 == m.a1 && a2 == m.a2 && a3 == m.a3 &&
            b1 == m.b1 && b2 == m.b2 && b3 == m.b3 &&
-           c1 == m.c1 && c2 == m.c2 && c3 == m.c3;
+           c1 == m.c1 && c2 == m.c2 && c3 == m.c3;*/
 }
 
 // ------------------------------------------------------------------------------------------------
 template <typename TReal>
-inline bool aiMatrix3x3t<TReal>::operator!= (const aiMatrix4x4t<TReal>& m) const
-{
+inline bool aiMatrix3x3t<TReal>::operator!= (const aiMatrix4x4t<TReal>& m) const {
     return !(*this == m);
 }
 
@@ -167,9 +167,12 @@ template <typename TReal>
 inline aiMatrix3x3t<TReal>& aiMatrix3x3t<TReal>::Transpose()
 {
     // (TReal&) don't remove, GCC complains cause of packed fields
-    std::swap( (TReal&)a2, (TReal&)b1);
+    std::swap( ( TReal& ) m[ 0 ].y, ( TReal& ) m[ 1 ].x );
+    std::swap( ( TReal& ) m[ 0 ].z, ( TReal& ) m[ 2 ].x );
+    std::swap( ( TReal& ) m[ 1 ].z, ( TReal& ) m[ 2 ].y );
+/*    std::swap( (TReal&)a2, (TReal&)b1);
     std::swap( (TReal&)a3, (TReal&)c1);
-    std::swap( (TReal&)b3, (TReal&)c2);
+    std::swap( (TReal&)b3, (TReal&)c2);*/
     return *this;
 }
 

@@ -528,16 +528,22 @@ void TextureTransformStep::Execute( aiScene* pScene)
 
                 aiMatrix3x3 m2,m3,m4,m5;
 
-                m4.a1 = scl.x;
-                m4.b2 = scl.y;
+                m4.m[0].x = scl.x;
+                m4.m[1].y = scl.y;
+/*                m4.a1 = scl.x;
+                m4.b2 = scl.y;*/
 
-                m2.a3 = m2.b3 = 0.5f;
-                m3.a3 = m3.b3 = -0.5f;
+                m2.m[ 0 ].z = m2.m[ 1 ].z = 0.5f;
+                m3.m[ 0 ].z = m3.m[ 1 ].z = -0.5f;
+/*                m2.a3 = m2.b3 = 0.5f;
+                m3.a3 = m3.b3 = -0.5f;*/
 
                 if ((*it).mRotation > AI_TT_ROTATION_EPSILON )
                     aiMatrix3x3::RotationZ((*it).mRotation,matrix);
 
-                m5.a3 += trl.x; m5.b3 += trl.y;
+                m5.m[ 0 ].z += trl.x; 
+                m5.m[ 1 ].z += trl.y;
+//                m5.a3 += trl.x; m5.b3 += trl.y;
                 matrix = m2 * m4 * matrix * m3 * m5;
 
                 for (src = dest; src != end; ++src) { /* manual homogenious divide */

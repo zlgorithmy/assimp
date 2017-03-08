@@ -165,28 +165,34 @@ struct STransformVecInfo : public aiUVTransform
         if (1.0f != mScaling.x || 1.0f != mScaling.y)
         {
             aiMatrix3x3 mScale;
-            mScale.a1 = mScaling.x;
-            mScale.b2 = mScaling.y;
+            mScale.m[ 0 ].x = mScaling.x;
+//            mScale.a1 = mScaling.x;
+            mScale.m[ 1 ].y = mScaling.y;
+//            mScale.b2 = mScaling.y;
             mOut = mScale;
         }
         if (mRotation)
         {
             aiMatrix3x3 mRot;
-            mRot.a1 = mRot.b2 = std::cos(mRotation);
-            mRot.a2 = mRot.b1 = std::sin(mRotation);
-            mRot.a2 = -mRot.a2;
+            mRot.m[ 0 ].x = mRot.m[ 1 ].y = std::cos(mRotation);
+            mRot.m[ 0 ].y = mRot.m[ 1 ].x = std::sin(mRotation);
+            mRot.m[ 0 ].y = -mRot.m[ 0 ].y;
+/*            mRot.a1 = mRot.b2 = std::cos( mRotation );
+            mRot.a2 = mRot.b1 = std::sin( mRotation );
+            mRot.a2 = -mRot.a2;*/
             mOut *= mRot;
         }
         if (mTranslation.x || mTranslation.y)
         {
             aiMatrix3x3 mTrans;
-            mTrans.a3 = mTranslation.x;
-            mTrans.b3 = mTranslation.y;
+            mTrans.m[ 0 ].z = mTranslation.x;
+            mTrans.m[ 1 ].z = mTranslation.y;
+/*            mTrans.a3 = mTranslation.x;
+            mTrans.b3 = mTranslation.y;*/
             mOut *= mTrans;
         }
     }
 };
-
 
 // ---------------------------------------------------------------------------
 /** Helper step to compute final UV coordinate sets if there are scalings

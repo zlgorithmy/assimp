@@ -57,9 +57,12 @@ template <typename TReal>
 inline aiVector3t<TReal> operator * (const aiMatrix3x3t<TReal>& pMatrix, const aiVector3t<TReal>& pVector)
 {
     aiVector3t<TReal> res;
-    res.x = pMatrix.a1 * pVector.x + pMatrix.a2 * pVector.y + pMatrix.a3 * pVector.z;
+    res.x = pMatrix.m[ 0 ].x * pVector.x + pMatrix.m[ 0 ].y * pVector.y + pMatrix.m[ 0 ].z * pVector.z;
+    res.y = pMatrix.m[ 1 ].x * pVector.x + pMatrix.m[ 1 ].y * pVector.y + pMatrix.m[ 1 ].z * pVector.z;
+    res.z = pMatrix.m[ 2 ].x * pVector.x + pMatrix.m[ 2 ].y * pVector.y + pMatrix.m[ 2 ].z * pVector.z;
+/*    res.x = pMatrix.a1 * pVector.x + pMatrix.a2 * pVector.y + pMatrix.a3 * pVector.z;
     res.y = pMatrix.b1 * pVector.x + pMatrix.b2 * pVector.y + pMatrix.b3 * pVector.z;
-    res.z = pMatrix.c1 * pVector.x + pMatrix.c2 * pVector.y + pMatrix.c3 * pVector.z;
+    res.z = pMatrix.c1 * pVector.x + pMatrix.c2 * pVector.y + pMatrix.c3 * pVector.z;*/
     return res;
 }
 
@@ -69,6 +72,10 @@ template <typename TReal>
 inline aiVector3t<TReal> operator * (const aiMatrix4x4t<TReal>& pMatrix, const aiVector3t<TReal>& pVector)
 {
     aiVector3t<TReal> res;
+/*    res.x = pMatrix.m[ 0 ].x * pVector.x + pMatrix.m[ 0 ].y * pVector.y + pMatrix.m[ 0 ].z * pVector.z + pMatrix.m[ 0 ].w;
+    res.y = pMatrix.m[ 1 ].x * pVector.x + pMatrix.m[ 1 ].y * pVector.y + pMatrix.m[ 1 ].z * pVector.z + pMatrix.m[ 1 ].w;
+    res.z = pMatrix.m[ 2 ].x * pVector.x + pMatrix.m[ 2 ].y * pVector.y + pMatrix.m[ 2 ].z * pVector.z + pMatrix.m[ 2 ].w;*/
+
     res.x = pMatrix.a1 * pVector.x + pMatrix.a2 * pVector.y + pMatrix.a3 * pVector.z + pMatrix.a4;
     res.y = pMatrix.b1 * pVector.x + pMatrix.b2 * pVector.y + pMatrix.b3 * pVector.z + pMatrix.b4;
     res.z = pMatrix.c1 * pVector.x + pMatrix.c2 * pVector.y + pMatrix.c3 * pVector.z + pMatrix.c4;

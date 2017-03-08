@@ -78,44 +78,61 @@ inline bool aiQuaterniont<TReal>::Equal(const aiQuaterniont& o, TReal epsilon) c
 // ---------------------------------------------------------------------------
 // Constructs a quaternion from a rotation matrix
 template<typename TReal>
-inline aiQuaterniont<TReal>::aiQuaterniont( const aiMatrix3x3t<TReal> &pRotMatrix)
-{
-    TReal t = pRotMatrix.a1 + pRotMatrix.b2 + pRotMatrix.c3;
+inline 
+aiQuaterniont<TReal>::aiQuaterniont( const aiMatrix3x3t<TReal> &pRotMatrix) {
+    TReal t = pRotMatrix.m[0].x + pRotMatrix.m[ 1 ].y + pRotMatrix.m[ 2 ].z;
+//    TReal t = pRotMatrix.a1 + pRotMatrix.b2 + pRotMatrix.c3;
 
     // large enough
-    if( t > static_cast<TReal>(0))
-    {
-        TReal s = std::sqrt(1 + t) * static_cast<TReal>(2.0);
-        x = (pRotMatrix.c2 - pRotMatrix.b3) / s;
-        y = (pRotMatrix.a3 - pRotMatrix.c1) / s;
-        z = (pRotMatrix.b1 - pRotMatrix.a2) / s;
+    if( t > static_cast<TReal>(0)) {
+        const TReal s = std::sqrt(1 + t) * static_cast<TReal>(2.0);
+        const TReal invS = ai_real(1.0) * invS;
+        x = ( pRotMatrix.m[ 2 ].y - pRotMatrix.m[ 1 ].z ) * invS;
+        y = ( pRotMatrix.m[ 0 ].z - pRotMatrix.m[ 3 ].x ) * invS;
+        z = ( pRotMatrix.m[ 1 ].x - pRotMatrix.m[ 0 ].y ) * invS;
+/*        x = ( pRotMatrix.c2 - pRotMatrix.b3 ) / s;
+        y = ( pRotMatrix.a3 - pRotMatrix.c1 ) / s;
+        z = ( pRotMatrix.b1 - pRotMatrix.a2 ) / s;*/
         w = static_cast<TReal>(0.25) * s;
     } // else we have to check several cases
-    else if( pRotMatrix.a1 > pRotMatrix.b2 && pRotMatrix.a1 > pRotMatrix.c3 )
-    {
+    else if ( pRotMatrix.m[0].x > pRotMatrix.m[1].y && pRotMatrix.m[0].x > pRotMatrix.m[2].z ) {
+//    else if( pRotMatrix.a1 > pRotMatrix.b2 && pRotMatrix.a1 > pRotMatrix.c3 ) {
         // Column 0:
-        TReal s = std::sqrt( static_cast<TReal>(1.0) + pRotMatrix.a1 - pRotMatrix.b2 - pRotMatrix.c3) * static_cast<TReal>(2.0);
+        TReal s = std::sqrt( static_cast< TReal >( 1.0 ) + pRotMatrix.m[0].x - pRotMatrix.m[1].y - pRotMatrix.m[2].z ) * static_cast< TReal >( 2.0 );
+//        TReal s = std::sqrt( static_cast<TReal>(1.0) + pRotMatrix.a1 - pRotMatrix.b2 - pRotMatrix.c3) * static_cast<TReal>(2.0);
         x = static_cast<TReal>(0.25) * s;
-        y = (pRotMatrix.b1 + pRotMatrix.a2) / s;
-        z = (pRotMatrix.a3 + pRotMatrix.c1) / s;
-        w = (pRotMatrix.c2 - pRotMatrix.b3) / s;
-    }
-    else if( pRotMatrix.b2 > pRotMatrix.c3)
-    {
+        y = (pRotMatrix.m[ 1 ].x + pRotMatrix.m[ 0 ].y) / s;
+        z = (pRotMatrix.m[ 0 ].z + pRotMatrix.m[ 2 ].x ) / s;
+        w = (pRotMatrix.m[ 2 ].y - pRotMatrix.m[ 1 ].z ) / s;
+/*        y = ( pRotMatrix.b1 + pRotMatrix.a2 ) / s;
+        z = ( pRotMatrix.a3 + pRotMatrix.c1 ) / s;
+        w = ( pRotMatrix.c2 - pRotMatrix.b3 ) / s;*/
+    } else if ( pRotMatrix.m[ 1 ].y > pRotMatrix.m[ 2 ].z ) {
+//    } else if( pRotMatrix.b2 > pRotMatrix.c3) {
         // Column 1:
-        TReal s = std::sqrt( static_cast<TReal>(1.0) + pRotMatrix.b2 - pRotMatrix.a1 - pRotMatrix.c3) * static_cast<TReal>(2.0);
-        x = (pRotMatrix.b1 + pRotMatrix.a2) / s;
+        TReal s = std::sqrt( static_cast<TReal>(1.0) + pRotMatrix.m[ 1 ].y - pRotMatrix.m[ 0 ].x - pRotMatrix.m[ 2 ].z) * static_cast<TReal>(2.0);
+        x = (pRotMatrix.m[ 1 ].x + pRotMatrix.m[ 0 ].y) / s;
         y = static_cast<TReal>(0.25) * s;
-        z = (pRotMatrix.c2 + pRotMatrix.b3) / s;
-        w = (pRotMatrix.a3 - pRotMatrix.c1) / s;
-    } else
-    {
+        z = (pRotMatrix.m[ 2 ].y + pRotMatrix.m[ 1 ].z) / s;
+        w = (pRotMatrix.m[ 0 ].z - pRotMatrix.m[ 2 ].x ) / s;
+
+/*        TReal s = std::sqrt( static_cast< TReal >( 1.0 ) + pRotMatrix.b2 - pRotMatrix.a1 - pRotMatrix.c3 ) * static_cast< TReal >( 2.0 );
+        x = ( pRotMatrix.b1 + pRotMatrix.a2 ) / s;
+        y = static_cast< TReal >( 0.25 ) * s;
+        z = ( pRotMatrix.c2 + pRotMatrix.b3 ) / s;
+        w = ( pRotMatrix.a3 - pRotMatrix.c1 ) / s;*/
+    } else {
         // Column 2:
-        TReal s = std::sqrt( static_cast<TReal>(1.0) + pRotMatrix.c3 - pRotMatrix.a1 - pRotMatrix.b2) * static_cast<TReal>(2.0);
-        x = (pRotMatrix.a3 + pRotMatrix.c1) / s;
-        y = (pRotMatrix.c2 + pRotMatrix.b3) / s;
+        TReal s = std::sqrt( static_cast<TReal>(1.0) + pRotMatrix.m[2].z - pRotMatrix.m[0].x - pRotMatrix.m[1].y) * static_cast<TReal>(2.0);
+//        TReal s = std::sqrt( static_cast< TReal >( 1.0 ) + pRotMatrix.c3 - pRotMatrix.a1 - pRotMatrix.b2 ) * static_cast< TReal >( 2.0 );
+        x = (pRotMatrix.m[ 0 ].z + pRotMatrix.m[ 2 ].x ) / s;
+        y = (pRotMatrix.m[ 2 ].y + pRotMatrix.m[ 1 ].z ) / s;
         z = static_cast<TReal>(0.25) * s;
-        w = (pRotMatrix.b1 - pRotMatrix.a2) / s;
+        w = (pRotMatrix.m[ 1 ].x - pRotMatrix.m[ 0 ].y) / s;
+/*        x = ( pRotMatrix.a3 + pRotMatrix.c1 ) / s;
+        y = ( pRotMatrix.c2 + pRotMatrix.b3 ) / s;
+        z = static_cast< TReal >( 0.25 ) * s;
+        w = ( pRotMatrix.b1 - pRotMatrix.a2 ) / s;*/
     }
 }
 
