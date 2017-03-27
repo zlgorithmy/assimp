@@ -117,7 +117,7 @@ inline aiMatrix3x3t<TReal> aiMatrix3x3t<TReal>::operator* (const aiMatrix3x3t<TR
 template <typename TReal>
 inline 
 TReal* aiMatrix3x3t<TReal>::operator[] (unsigned int p_iIndex) {
-    return m[ p_iIndex ];
+    return &m[ p_iIndex ].x;
 }
 
 // ------------------------------------------------------------------------------------------------

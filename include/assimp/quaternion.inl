@@ -86,7 +86,7 @@ aiQuaterniont<TReal>::aiQuaterniont( const aiMatrix3x3t<TReal> &pRotMatrix) {
     // large enough
     if( t > static_cast<TReal>(0)) {
         const TReal s = std::sqrt(1 + t) * static_cast<TReal>(2.0);
-        const TReal invS = ai_real(1.0) * invS;
+        const TReal invS = ai_real(1.0) / s;
         x = ( pRotMatrix.m[ 2 ].y - pRotMatrix.m[ 1 ].z ) * invS;
         y = ( pRotMatrix.m[ 0 ].z - pRotMatrix.m[ 3 ].x ) * invS;
         z = ( pRotMatrix.m[ 1 ].x - pRotMatrix.m[ 0 ].y ) * invS;

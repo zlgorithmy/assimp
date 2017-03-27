@@ -45,7 +45,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef AI_MATRIX4X4_H_INC
 #define AI_MATRIX4X4_H_INC
 
-#include "vector3.h"
+#include <assimp/vector3.h>
+#include <assimp/vector4.h>
 #include "defs.h"
 
 #ifdef __cplusplus
@@ -67,6 +68,7 @@ template<typename TReal>
 class aiMatrix4x4t
 {
 public:
+    typedef aiVector4t<TReal> col_type;
 
     /** set to identity */
     aiMatrix4x4t ();
@@ -252,6 +254,8 @@ public:
         const aiVector3t<TReal>& to, aiMatrix4x4t& out);
 
 public:
+    col_type m[4];
+
     TReal a1, a2, a3, a4;
     TReal b1, b2, b3, b4;
     TReal c1, c2, c3, c4;
