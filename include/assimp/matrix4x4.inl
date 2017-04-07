@@ -58,11 +58,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // ----------------------------------------------------------------------------------------
 template <typename TReal>
-aiMatrix4x4t<TReal> ::aiMatrix4x4t () :
-    a1(1.0f), a2(), a3(), a4(),
-    b1(), b2(1.0f), b3(), b4(),
-    c1(), c2(), c3(1.0f), c4(),
-    d1(), d2(), d3(), d4(1.0f)
+aiMatrix4x4t<TReal>::aiMatrix4x4t () :
+    m_m4x4.val.a1(1.0f), m_m4x4.val.a2(),     m_m4x4.val.a3(),     m_m4x4.val.a4(),
+    m_m4x4.val.b1(),     m_m4x4.val.b2(1.0f), m_m4x4.val.b3(),     m_m4x4.val.b4(),
+    m_m4x4.val.c1(),     m_m4x4.val.c2(),     m_m4x4.val.c3(1.0f), m_m4x4.val.c4(),
+    m_m4x4.val.d1(),     m_m4x4.val.d2(),     m_m4x4.val.d3(),     m_m4x4.val.d4(1.0f)
 {
 
 }
@@ -291,6 +291,7 @@ inline TReal* aiMatrix4x4t<TReal>::operator[](unsigned int p_iIndex) {
     if (p_iIndex > 3) {
         return NULL;
     }
+
     switch ( p_iIndex ) {
         case 0:
             return &a1;

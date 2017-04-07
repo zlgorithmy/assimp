@@ -250,10 +250,10 @@ struct aiBone
 
     //! Default constructor
     aiBone()
-        : mName()
-        , mNumWeights( 0 )
-      , mWeights( NULL )
-    {
+    : mName()
+    , mNumWeights( 0 )
+    , mWeights( NULL ) {
+        // empty
     }
 
     //! Copy constructor

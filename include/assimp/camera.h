@@ -184,33 +184,32 @@ struct aiCamera
     /** @brief Get a *right-handed* camera matrix from me
      *  @param out Camera matrix to be filled
      */
-    void GetCameraMatrix (aiMatrix4x4& out) const
-    {
-        /** todo: test ... should work, but i'm not absolutely sure */
+    void GetCameraMatrix(aiMatrix4x4& out) const {
+        /** todo: test ... should work, but I'm not absolutely sure */
 
         /** We don't know whether these vectors are already normalized ...*/
         aiVector3D zaxis = mLookAt;     zaxis.Normalize();
         aiVector3D yaxis = mUp;         yaxis.Normalize();
         aiVector3D xaxis = mUp^mLookAt; xaxis.Normalize();
 
-        out.a4 = -(xaxis * mPosition);
-        out.b4 = -(yaxis * mPosition);
-        out.c4 = -(zaxis * mPosition);
+        out.m_m4x4.val.a4 = -(xaxis * mPosition);
+        out.m_m4x4.val.b4 = -(yaxis * mPosition);
+        out.m_m4x4.val.c4 = -(zaxis * mPosition);
 
-        out.a1 = xaxis.x;
-        out.a2 = xaxis.y;
-        out.a3 = xaxis.z;
+        out.m_m4x4.val.a1 = xaxis.x;
+        out.m_m4x4.val.a2 = xaxis.y;
+        out.m_m4x4.val.a3 = xaxis.z;
 
-        out.b1 = yaxis.x;
-        out.b2 = yaxis.y;
-        out.b3 = yaxis.z;
+        out.m_m4x4.val.b1 = yaxis.x;
+        out.m_m4x4.val.b2 = yaxis.y;
+        out.m_m4x4.val.b3 = yaxis.z;
 
-        out.c1 = zaxis.x;
-        out.c2 = zaxis.y;
-        out.c3 = zaxis.z;
+        out.m_m4x4.val.c1 = zaxis.x;
+        out.m_m4x4.val.c2 = zaxis.y;
+        out.m_m4x4.val.c3 = zaxis.z;
 
-        out.d1 = out.d2 = out.d3 = 0.f;
-        out.d4 = 1.f;
+        out.m_m4x4.val.d1 = out.m_m4x4.val.d2 = out.m_m4x4.val.d3 = 0.f;
+        out.m_m4x4.val.d4 = 1.f;
     }
 
 #endif

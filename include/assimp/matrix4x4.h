@@ -46,6 +46,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define AI_MATRIX4X4_H_INC
 
 #include "vector3.h"
+#include "vector4.h"
 #include "defs.h"
 
 #ifdef __cplusplus
@@ -254,10 +255,25 @@ public:
         const aiVector3t<TReal>& to, aiMatrix4x4t& out);
 
 public:
-    TReal a1, a2, a3, a4;
-    TReal b1, b2, b3, b4;
-    TReal c1, c2, c3, c4;
-    TReal d1, d2, d3, d4;
+    union m4x4_t {
+        struct val_t {
+            TReal a1, a2, a3, a4;
+            TReal b1, b2, b3, b4;
+            TReal c1, c2, c3, c4;
+            TReal d1, d2, d3, d4;
+
+            ~val_t() {}
+        } val;
+        aiVector4D vec[ 4 ];
+
+        m4x4_t() {
+            // empty
+        }
+
+        ~m4x4_t() {
+            // empty
+        }
+    } m_m4x4;
 };
 
 typedef aiMatrix4x4t<ai_real> aiMatrix4x4;
@@ -265,11 +281,21 @@ typedef aiMatrix4x4t<ai_real> aiMatrix4x4;
 #else
 
 struct aiMatrix4x4 {
-    ai_real a1, a2, a3, a4;
+    union m4x4_t {
+        struct val_t {
+            TReal a1, a2, a3, a4;
+            TReal b1, b2, b3, b4;
+            TReal c1, c2, c3, c4;
+            TReal d1, d2, d3, d4;
+        } val;
+        aiVector4D vec[ 4 ];
+    } m4x4;
+};
+/*    ai_real a1, a2, a3, a4;
     ai_real b1, b2, b3, b4;
     ai_real c1, c2, c3, c4;
-    ai_real d1, d2, d3, d4;
-};
+    ai_real d1, d2, d3, d4;*/
+//};
 
 
 #endif // __cplusplus
