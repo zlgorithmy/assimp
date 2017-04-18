@@ -58,13 +58,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // ----------------------------------------------------------------------------------------
 template <typename TReal>
-aiMatrix4x4t<TReal>::aiMatrix4x4t () :
-    m_m4x4.val.a1(1.0f), m_m4x4.val.a2(),     m_m4x4.val.a3(),     m_m4x4.val.a4(),
-    m_m4x4.val.b1(),     m_m4x4.val.b2(1.0f), m_m4x4.val.b3(),     m_m4x4.val.b4(),
-    m_m4x4.val.c1(),     m_m4x4.val.c2(),     m_m4x4.val.c3(1.0f), m_m4x4.val.c4(),
-    m_m4x4.val.d1(),     m_m4x4.val.d2(),     m_m4x4.val.d3(),     m_m4x4.val.d4(1.0f)
-{
-
+aiMatrix4x4t<TReal>::aiMatrix4x4t()
+: m_m4x4() {
+    // empty
 }
 
 // ----------------------------------------------------------------------------------------
@@ -217,13 +213,15 @@ inline aiMatrix4x4t<TReal> aiMatrix4x4t<TReal>::operator* (const aiMatrix4x4t<TR
 template <typename TReal>
 inline aiMatrix4x4t<TReal>& aiMatrix4x4t<TReal>::Transpose()
 {
+ 
+    
     // (TReal&) don't remove, GCC complains cause of packed fields
-    std::swap( (TReal&)b1, (TReal&)a2);
-    std::swap( (TReal&)c1, (TReal&)a3);
-    std::swap( (TReal&)c2, (TReal&)b3);
-    std::swap( (TReal&)d1, (TReal&)a4);
-    std::swap( (TReal&)d2, (TReal&)b4);
-    std::swap( (TReal&)d3, (TReal&)c4);
+    std::swap( (TReal&) m_m4x4.val.b1, (TReal&) m_m4x4.val.a2);
+    std::swap( (TReal&) m_m4x4.val.c1, (TReal&) m_m4x4.val.a3);
+    std::swap( (TReal&) m_m4x4.val.c2, (TReal&) m_m4x4.val.b3);
+    std::swap( (TReal&) m_m4x4.val.d1, (TReal&) m_m4x4.val.a4);
+    std::swap( (TReal&) m_m4x4.val.d2, (TReal&) m_m4x4.val.b4);
+    std::swap( (TReal&) m_m4x4.val.d3, (TReal&) m_m4x4.val.c4);
     return *this;
 }
 
@@ -309,34 +307,22 @@ inline TReal* aiMatrix4x4t<TReal>::operator[](unsigned int p_iIndex) {
 
 // ----------------------------------------------------------------------------------------
 template <typename TReal>
-inline const TReal* aiMatrix4x4t<TReal>::operator[](unsigned int p_iIndex) const {
+inline const TReal* aiMatrix4x4t<TReal>::operator[]( unsigned int p_iIndex ) const {
     if (p_iIndex > 3) {
         return NULL;
     }
-
-    switch ( p_iIndex ) {
-        case 0:
-            return &a1;
-        case 1:
-            return &b1;
-        case 2:
-            return &c1;
-        case 3:
-            return &d1;
-        default:
-            break;
-    }
-    return &a1;
+    const aiVector4D vec( m_m4x4.vec[ p_iIndex ] );
+    return vec;
 }
 
 // ----------------------------------------------------------------------------------------
 template <typename TReal>
 inline bool aiMatrix4x4t<TReal>::operator== (const aiMatrix4x4t<TReal>& m) const
 {
-    return (a1 == m.a1 && a2 == m.a2 && a3 == m.a3 && a4 == m.a4 &&
-            b1 == m.b1 && b2 == m.b2 && b3 == m.b3 && b4 == m.b4 &&
-            c1 == m.c1 && c2 == m.c2 && c3 == m.c3 && c4 == m.c4 &&
-            d1 == m.d1 && d2 == m.d2 && d3 == m.d3 && d4 == m.d4);
+    return ( m_m4x4.val.a1 == m.m_m4x4.val.a1 && m_m4x4.val.a2 == m.m_m4x4.val.a2 && m_m4x4.val.a3 == m.m_m4x4.val.a3 && m_m4x4.val.a4 == m.m_m4x4.val.a4 &&
+             m_m4x4.val.b1 == m.m_m4x4.val.b1 && m_m4x4.val.b2 == m.m_m4x4.val.b2 && m_m4x4.val.b3 == m.m_m4x4.val.b3 && m_m4x4.val.b4 == m.m_m4x4.val.b4 &&
+             m_m4x4.val.c1 == m.m_m4x4.val.c1 && m_m4x4.val.c2 == m.m_m4x4.val.c2 && m_m4x4.val.c3 == m.m_m4x4.val.c3 && m_m4x4.val.c4 == m.m_m4x4.val.c4 &&
+             m_m4x4.val.d1 == m.m_m4x4.val.d1 && m_m4x4.val.d2 == m.m_m4x4.val.d2 && m_m4x4.val.d3 == m.m_m4x4.val.d3 && m_m4x4.val.d4 == m.m_m4x4.val.d4);
 }
 
 // ----------------------------------------------------------------------------------------

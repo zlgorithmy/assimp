@@ -261,12 +261,21 @@ public:
             TReal b1, b2, b3, b4;
             TReal c1, c2, c3, c4;
             TReal d1, d2, d3, d4;
-
-            ~val_t() {}
+            val_t()
+            : a1( 1 ), a2( 0 ), a3( 0 ), a4( 0 )
+            , b1( 0 ), b2( 1 ), b3( 0 ), b4( 0 )
+            , c1( 0 ), c2( 0 ), c3( 1 ), c4( 0 )
+            , d1( 0 ), d2( 0 ), d3( 0 ), d4( 1 ) {
+                // empty
+            }
+            
+            ~val_t() {
+                // empty
+            }
         } val;
         aiVector4D vec[ 4 ];
 
-        m4x4_t() {
+        m4x4_t() : val() {
             // empty
         }
 
