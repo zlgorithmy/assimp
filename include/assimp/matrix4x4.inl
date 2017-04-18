@@ -312,7 +312,7 @@ inline const TReal* aiMatrix4x4t<TReal>::operator[]( unsigned int p_iIndex ) con
         return NULL;
     }
     const aiVector4D vec( m_m4x4.vec[ p_iIndex ] );
-    return vec;
+    return &vec;
 }
 
 // ----------------------------------------------------------------------------------------
