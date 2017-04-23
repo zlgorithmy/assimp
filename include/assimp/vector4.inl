@@ -40,7 +40,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 template<class TReal>
-inline
+AI_FORCE_INLINE
 aiVector4t<TReal>::aiVector4t()
 : x( 0 )
 , y( 0 )
@@ -50,14 +50,14 @@ aiVector4t<TReal>::aiVector4t()
 }
 
 template<class TReal>
-inline
+AI_FORCE_INLINE
 aiVector4t<TReal>::~aiVector4t() {
     // empty
 }
 
 template<class TReal>
-inline
-const aiVector4t& aiVector4t<TReal>::operator += ( const aiVector4t& o ) {
+AI_FORCE_INLINE
+const aiVector4t<TReal>& aiVector4t<TReal>::operator += ( const aiVector4t& o ) {
     x += o.x;
     y += o.y;
     z += o.z;
@@ -66,8 +66,8 @@ const aiVector4t& aiVector4t<TReal>::operator += ( const aiVector4t& o ) {
 }
 
 template<class TReal>
-inline
-const aiVector4t& aiVector4t<TReal>::operator -= ( const aiVector4t& o ) {
+AI_FORCE_INLINE
+const aiVector4t<TReal>& aiVector4t<TReal>::operator -= ( const aiVector4t& o ) {
     x -= o.x;
     y -= o.y;
     z -= o.z;
@@ -76,8 +76,8 @@ const aiVector4t& aiVector4t<TReal>::operator -= ( const aiVector4t& o ) {
 }
 
 template<class TReal>
-inline
-const aiVector4t& aiVector4t<TReal>::operator *= ( TReal f ) {
+AI_FORCE_INLINE
+const aiVector4t<TReal>& aiVector4t<TReal>::operator *= ( TReal f ) {
     x *= f;
     y *= f;
     z *= f;
@@ -86,8 +86,8 @@ const aiVector4t& aiVector4t<TReal>::operator *= ( TReal f ) {
 }
 
 template<class TReal>
-inline
-const aiVector4t& aiVector4t<TReal>::operator /= ( TReal f ) {
+AI_FORCE_INLINE
+const aiVector4t<TReal>& aiVector4t<TReal>::operator /= ( TReal f ) {
     if ( 0 == f ) {
         return *this;
     }
@@ -101,36 +101,57 @@ const aiVector4t& aiVector4t<TReal>::operator /= ( TReal f ) {
 }
 
 template<class TReal>
-inline
-aiVector4t& aiVector4t<TReal>::operator *= ( const aiMatrix3x3t<TReal>& mat );
+AI_FORCE_INLINE
+aiVector4t<TReal>& aiVector4t<TReal>::operator *= ( const aiMatrix3x3t<TReal>& mat ) {
+    return( *this = mat * ( *this ) );
+}
+
+template<class TReal>
+AI_FORCE_INLINE
+aiVector4t<TReal>& aiVector4t<TReal>::operator *= ( const aiMatrix4x4t<TReal>& mat ) {
+    return( *this = mat * ( *this ) );
+}
+
+template<class TReal>
+AI_FORCE_INLINE
+TReal aiVector4t<TReal>::operator[]( unsigned int i ) const {
+
+}
+
+template<class TReal>
+AI_FORCE_INLINE
+TReal& aiVector4t<TReal>::operator[]( unsigned int i ) {
+
+}
 
 template<class TReal>
 inline
-aiVector4t& aiVector4t<TReal>::operator *= ( const aiMatrix4x4t<TReal>& mat );
+bool aiVector4t<TReal>::operator == ( const aiVector4t& other ) const {
+    return ( x == other.x && y == other.y && z == other.z && w == other.w );
+}
 
 template<class TReal>
 inline
-TReal aiVector4t<TReal>::operator[]( unsigned int i ) const;
+bool aiVector4t<TReal>::operator!= ( const aiVector4t& other ) const {
+    return !( this == other );
+}
 
 template<class TReal>
 inline
-TReal& aiVector4t<TReal>::operator[]( unsigned int i );
+bool aiVector4t<TReal>::operator < ( const aiVector4t& other ) const {
+    return x != other.x?x < other.x:y != other.y?y < other.y:z < other.z;
+}
 
 template<class TReal>
 inline
-bool aiVector4t<TReal>::operator == ( const aiVector3t& other ) const;
+bool aiVector4t<TReal>::Equal( const aiVector4t& other, TReal epsilon = 1e-6 ) const {
+    return
+        std::abs( x - other.x ) <= epsilon &&
+        std::abs( y - other.y ) <= epsilon &&
+        std::abs( z - other.z ) <= epsilon &&
+        std::abs( w - other.w ) <= epsilon );
 
-template<class TReal>
-inline
-bool aiVector4t<TReal>::operator!= ( const aiVector3t& other ) const;
-
-template<class TReal>
-inline
-bool aiVector4t<TReal>::operator < ( const aiVector3t& other ) const;
-
-template<class TReal>
-inline
-bool aiVector4t<TReal>::Equal( const aiVector4t& other, TReal epsilon = 1e-6 ) const;
+}
 
 template <typename TOther>
 operator aiVector4t<TReal>::aiVector4t<TOther>() const;
@@ -146,20 +167,36 @@ void aiVector4t<TReal>::Set( TReal _x, TReal _y, TReal _z, TReal _w ) {
 
 template<class TReal>
 inline
-TReal aiVector4t<TReal>::SquareLength() const;
+TReal aiVector4t<TReal>::SquareLength() const {
+    return x*x + y*y + z*z + w*w;
+}
 
 template<class TReal>
 inline
-TReal aiVector4t<TReal>::Length() const;
+TReal aiVector4t<TReal>::Length() const {
+    return ::sqrt( SquareLength() );
+}
 
 template<class TReal>
-inline
-aiVector4t& aiVector4t<TReal>::Normalize();
+AI_FORCE_INLINE
+aiVector4t& aiVector4t<TReal>::Normalize() {
+    *this /= Length();
+    return *this;
+}
 
 template<class TReal>
-inline
-aiVector4t& aiVector4t<TReal>::NormalizeSafe();
+AI_FORCE_INLINE
+aiVector4t& aiVector4t<TReal>::NormalizeSafe() {
+    const TReal len = Length();
+    if ( len > static_cast< TReal >( 0 ) ) {
+        *this /= len;
+    }
+    return *this;
+
+}
 
 template<class TReal>
-inline
-const aiVector4t aiVector4t<TReal>::SymMul( const aiVector4t& o );
+AI_FORCE_INLINE
+const aiVector4t aiVector4t<TReal>::SymMul( const aiVector4t& o ) {
+
+}

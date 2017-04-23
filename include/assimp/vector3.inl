@@ -98,35 +98,49 @@ AI_FORCE_INLINE TReal aiVector3t<TReal>::Length() const {
 // ------------------------------------------------------------------------------------------------
 template <typename TReal>
 AI_FORCE_INLINE aiVector3t<TReal>& aiVector3t<TReal>::Normalize() {
-    *this /= Length(); return *this;
+    *this /= Length(); 
+    return *this;
 }
 // ------------------------------------------------------------------------------------------------
 template <typename TReal>
 AI_FORCE_INLINE aiVector3t<TReal>& aiVector3t<TReal>::NormalizeSafe() {
     TReal len = Length();
-    if (len > static_cast<TReal>(0))
+    if ( len > static_cast< TReal >( 0 ) ) {
         *this /= len;
+    }
     return *this;
 }
 // ------------------------------------------------------------------------------------------------
 template <typename TReal>
 AI_FORCE_INLINE const aiVector3t<TReal>& aiVector3t<TReal>::operator += (const aiVector3t<TReal>& o) {
-    x += o.x; y += o.y; z += o.z; return *this;
+    x += o.x; 
+    y += o.y; 
+    z += o.z; 
+    return *this;
 }
 // ------------------------------------------------------------------------------------------------
 template <typename TReal>
 AI_FORCE_INLINE const aiVector3t<TReal>& aiVector3t<TReal>::operator -= (const aiVector3t<TReal>& o) {
-    x -= o.x; y -= o.y; z -= o.z; return *this;
+    x -= o.x; 
+    y -= o.y; 
+    z -= o.z; 
+    return *this;
 }
 // ------------------------------------------------------------------------------------------------
 template <typename TReal>
 AI_FORCE_INLINE const aiVector3t<TReal>& aiVector3t<TReal>::operator *= (TReal f) {
-    x *= f; y *= f; z *= f; return *this;
+    x *= f; 
+    y *= f; 
+    z *= f; 
+    return *this;
 }
 // ------------------------------------------------------------------------------------------------
 template <typename TReal>
 AI_FORCE_INLINE const aiVector3t<TReal>& aiVector3t<TReal>::operator /= (TReal f) {
-    x /= f; y /= f; z /= f; return *this;
+    x /= f; 
+    y /= f; 
+    z /= f; 
+    return *this;
 }
 // ------------------------------------------------------------------------------------------------
 template <typename TReal>
