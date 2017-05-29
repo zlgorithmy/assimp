@@ -677,6 +677,11 @@ ADD_ASSIMP_IMPORTER( MMD
   MMDVmdParser.h
 )
 
+ADD_ASSIMP_IMPORTER( Valeria
+  ValeriaImporter.h
+  ValeriaImporter.cpp
+)
+
 SET( Step_SRCS
   StepExporter.h
   StepExporter.cpp
