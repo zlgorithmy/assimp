@@ -38,11 +38,25 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ----------------------------------------------------------------------
 */
-
 #include "ValeriaImporter.h"
 
 namespace Assimp {
 namespace Valeria {
+
+static const std::string Extension = "val";
+
+static const aiImporterDesc desc = {
+    "Valentina File Format",
+    "",
+    "",
+    "",
+    aiImporterFlags_SupportTextFlavour,
+    0,
+    0,
+    0,
+    0,
+    Extension.c_str()
+};
 
 ValeriaImporter::ValeriaImporter() 
 : BaseImporter() {
@@ -53,16 +67,24 @@ ValeriaImporter::~ValeriaImporter() {
 	// empty
 }
 
-bool ValeriaImporter::CanRead( const std::string& pFile, IOSystem* pIOHandler, bool checkSig ) const {
-    return true;
+bool ValeriaImporter::CanRead( const std::string &file, IOSystem* pIOHandler, bool checkSig ) const {
+    if ( !checkSig ) {
+        return SimpleExtensionCheck( file, Extension.c_str() );
+    } else {
+        static const char *tokens[] = { "<pattern>", "<version>", "<author>", "<unit>", "<patternName>", "<patternNumber>" };
+        return BaseImporter::SearchFileHeaderForToken( pIOHandler, file, tokens, 6 );
+    }
+
+    return false;
 }
 
 const aiImporterDesc* ValeriaImporter::GetInfo() const {
-    return nullptr;
+    return &desc;
 }
     
 void ValeriaImporter::InternReadFile( const std::string& pFile, aiScene* pScene, IOSystem* pIOHandler ) {
-    
+    int i = 0;
+    i++;
 }
 
 } // Namespace Valeria
