@@ -58,7 +58,7 @@ namespace Assimp {
  * Load the glTF2 format.
  * https://github.com/KhronosGroup/glTF/tree/master/specification
  */
-class glTF2Importer : public BaseImporter{
+class glTF2Importer : public BaseImporter {
 public:
     glTF2Importer();
     virtual ~glTF2Importer();
@@ -69,11 +69,8 @@ protected:
     virtual void InternReadFile( const std::string& pFile, aiScene* pScene, IOSystem* pIOHandler );
 
 private:
-
     std::vector<unsigned int> meshOffsets;
-
     std::vector<int> embeddedTexIdxs;
-
     aiScene* mScene;
 
     void ImportEmbeddedTextures(glTF2::Asset& a);
@@ -82,7 +79,6 @@ private:
     void ImportCameras(glTF2::Asset& a);
     void ImportLights(glTF2::Asset& a);
     void ImportNodes(glTF2::Asset& a);
-
 };
 
 } // Namespace assimp

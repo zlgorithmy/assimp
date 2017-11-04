@@ -3,7 +3,7 @@
 Open Asset Import Library (assimp)
 ---------------------------------------------------------------------------
 
-Copyright (c) 2006-2011, assimp team
+Copyright (c) 2006-2017, assimp team
 
 All rights reserved.
 
@@ -63,8 +63,7 @@ struct aiFileIO; // aiFileIO.h
 * learn how many export formats the current Assimp build supports and #aiGetExportFormatDescription()
 * to retrieve a description of an export format option.
 */
-struct aiExportFormatDesc
-{
+struct aiExportFormatDesc {
     /// a short string ID to uniquely identify the export format. Use this ID string to
     /// specify which file format you want to export to when calling #aiExportScene().
     /// Example: "dae" or "obj"
@@ -78,13 +77,11 @@ struct aiExportFormatDesc
     const char* fileExtension;
 };
 
-
 // --------------------------------------------------------------------------------
 /** Returns the number of export file formats available in the current Assimp build.
  * Use aiGetExportFormatDescription() to retrieve infos of a specific export format.
  */
 ASSIMP_API size_t aiGetExportFormatCount(void);
-
 
 // --------------------------------------------------------------------------------
 /** Returns a description of the nth export file format. Use #aiGetExportFormatCount()
@@ -114,7 +111,6 @@ ASSIMP_API void aiReleaseExportFormatDescription( const C_STRUCT aiExportFormatD
  */
 ASSIMP_API void aiCopyScene(const C_STRUCT aiScene* pIn,
     C_STRUCT aiScene** pOut);
-
 
 // --------------------------------------------------------------------------------
 /** Frees a scene copy created using aiCopyScene() */
@@ -164,7 +160,6 @@ ASSIMP_API aiReturn aiExportScene( const C_STRUCT aiScene* pScene,
     const char* pFileName,
     unsigned int pPreprocessing);
 
-
 // --------------------------------------------------------------------------------
 /** Exports the given scene to a chosen file format using custom IO logic supplied by you.
 * @param pScene The scene to export. Stays in possession of the caller, is not changed by the function.
@@ -186,7 +181,6 @@ ASSIMP_API aiReturn aiExportSceneEx( const C_STRUCT aiScene* pScene,
     C_STRUCT aiFileIO* pIO,
     unsigned int pPreprocessing );
 
-
 // --------------------------------------------------------------------------------
 /** Describes a blob of exported scene data. Use #aiExportSceneToBlob() to create a blob containing an
 * exported scene. The memory referred by this structure is owned by Assimp.
@@ -197,13 +191,12 @@ ASSIMP_API aiReturn aiExportSceneEx( const C_STRUCT aiScene* pScene,
 * This is used when exporters write more than one output file for a given #aiScene. See the remarks for
 * #aiExportDataBlob::name for more information.
 */
-struct aiExportDataBlob
-{
+struct aiExportDataBlob {
     /// Size of the data in bytes
-    size_t size;
+    size_t mSize;
 
     /// The data.
-    void* data;
+    void *mData;
 
     /** Name of the blob. An empty string always
         indicates the first (and primary) blob,
@@ -217,16 +210,26 @@ struct aiExportDataBlob
         extension that should be used when writing
         the data to disc.
      */
-    C_STRUCT aiString name;
+    C_STRUCT aiString mName;
 
     /** Pointer to the next blob in the chain or NULL if there is none. */
-    C_STRUCT aiExportDataBlob * next;
+    C_STRUCT aiExportDataBlob * mNext;
 
 #ifdef __cplusplus
     /// Default constructor
-    aiExportDataBlob() { size = 0; data = next = NULL; }
+    aiExportDataBlob() 
+    : mSize(0)
+    , mData( nullptr )
+    , mName()
+    , mNext( nullptr ) {
+         // empty
+    }
+    
     /// Releases the data
-    ~aiExportDataBlob() { delete [] static_cast<unsigned char*>( data ); delete next; }
+    ~aiExportDataBlob() { 
+        delete [] static_cast<unsigned char*>( mData ); 
+        delete mNext; 
+    }
 
 private:
     // no copying
@@ -245,7 +248,8 @@ private:
 * @param pPreprocessing Please see the documentation for #aiExportScene
 * @return the exported data or NULL in case of error
 */
-ASSIMP_API const C_STRUCT aiExportDataBlob* aiExportSceneToBlob( const C_STRUCT aiScene* pScene, const char* pFormatId,  unsigned int pPreprocessing );
+ASSIMP_API const C_STRUCT aiExportDataBlob* aiExportSceneToBlob( const C_STRUCT aiScene* pScene, 
+        const char* pFormatId,  unsigned int pPreprocessing );
 
 
 // --------------------------------------------------------------------------------
@@ -257,7 +261,8 @@ ASSIMP_API void aiReleaseExportBlob( const C_STRUCT aiExportDataBlob* pData );
 
 #ifdef __cplusplus
 }
-#endif
+#endif // __cplusplus
 
 #endif // ASSIMP_BUILD_NO_EXPORT
+
 #endif // AI_EXPORT_H_INC

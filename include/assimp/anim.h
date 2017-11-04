@@ -57,9 +57,9 @@ extern "C" {
 #endif
 
 // ---------------------------------------------------------------------------
-/** A time-value pair specifying a certain 3D vector for the given time. */
-struct aiVectorKey
-{
+/** A time-value pair specifying a certain 3D vector for the given time. 
+*/
+struct aiVectorKey {
     /** The time of this key */
     double mTime;
 
@@ -104,7 +104,8 @@ struct aiVectorKey
 
 // ---------------------------------------------------------------------------
 /** A time-value pair specifying a rotation for the given time.
- *  Rotations are expressed with quaternions. */
+ *  Rotations are expressed with quaternions. 
+ */
 struct aiQuatKey
 {
     /** The time of this key */
@@ -122,9 +123,10 @@ struct aiQuatKey
 
     /** Construction from a given time and key value */
     aiQuatKey(double time, const aiQuaternion& value)
-        :   mTime   (time)
-        ,   mValue  (value)
-    {}
+    :   mTime   (time)
+    ,   mValue  (value) {
+        // empty
+     }
 
     typedef aiQuaternion elem_type;
 
@@ -143,13 +145,13 @@ struct aiQuatKey
     bool operator > (const aiQuatKey& o) const {
         return mTime > o.mTime;
     }
-#endif
+#endif // __cplusplus
 };
 
 // ---------------------------------------------------------------------------
-/** Binds a anim mesh to a specific point in time. */
-struct aiMeshKey
-{
+/** Binds a anim mesh to a specific point in time. 
+ */
+struct aiMeshKey {
     /** The time of this key */
     double mTime;
 
@@ -162,6 +164,7 @@ struct aiMeshKey
 #ifdef __cplusplus
 
     aiMeshKey() {
+        // empty
     }
 
     /** Construction from a given time and key value */
@@ -188,13 +191,12 @@ struct aiMeshKey
         return mTime > o.mTime;
     }
 
-#endif
+#endif // __cplusplus
 };
 
 // ---------------------------------------------------------------------------
 /** Binds a morph anim mesh to a specific point in time. */
-struct aiMeshMorphKey
-{
+struct aiMeshMorphKey {
     /** The time of this key */
     double mTime;
 
@@ -206,30 +208,28 @@ struct aiMeshMorphKey
     unsigned int mNumValuesAndWeights;
 #ifdef __cplusplus
 	aiMeshMorphKey()
-		: mTime(0.0)
-		, mValues(NULL)
-		, mWeights(NULL)
-		, mNumValuesAndWeights(0)
-	{
-
+    : mTime(0.0)
+    , mValues(NULL)
+    , mWeights(NULL)
+    , mNumValuesAndWeights(0) {
+        // empty
 	}
 
-    ~aiMeshMorphKey()
-    {
+    ~aiMeshMorphKey() {
         if (mNumValuesAndWeights && mValues && mWeights) {
             delete [] mValues;
             delete [] mWeights;
         }
     }
-#endif
+#endif // __cplusplus
 };
 
 // ---------------------------------------------------------------------------
 /** Defines how an animation channel behaves outside the defined time
  *  range. This corresponds to aiNodeAnim::mPreState and
- *  aiNodeAnim::mPostState.*/
-enum aiAnimBehaviour
-{
+ *  aiNodeAnim::mPostState.
+ */
+enum aiAnimBehaviour {
     /** The value from the default node transformation is taken*/
     aiAnimBehaviour_DEFAULT  = 0x0,
 
@@ -250,7 +250,7 @@ enum aiAnimBehaviour
      *  the compiler to map this enum to a 32 Bit integer  */
 #ifndef SWIG
     _aiAnimBehaviour_Force32Bit = INT_MAX
-#endif
+#endif // SWIG
 };
 
 // ---------------------------------------------------------------------------
@@ -267,7 +267,8 @@ enum aiAnimBehaviour
  *  @note All keys are returned in their correct, chronological order.
  *  Duplicate keys don't pass the validation step. Most likely there
  *  will be no negative time values, but they are not forbidden also ( so
- *  implementations need to cope with them! ) */
+ *  implementations need to cope with them! ) 
+ */
 struct aiNodeAnim {
     /** The name of the node affected by this animation. The node
      *  must exist and it must be unique.*/
@@ -344,9 +345,9 @@ struct aiNodeAnim {
  *  meshes. Meshes carry the animation data for each frame in their
  *  aiMesh::mAnimMeshes array. The purpose of aiMeshAnim is to
  *  define keyframes linking each mesh attachment to a particular
- *  point in time. */
-struct aiMeshAnim
-{
+ *  point in time. 
+ */
+struct aiMeshAnim {
     /** Name of the mesh to be animated. An empty string is not allowed,
      *  animated meshes need to be named (not necessarily uniquely,
      *  the name can basically serve as wild-card to select a group
@@ -362,22 +363,21 @@ struct aiMeshAnim
 #ifdef __cplusplus
 
     aiMeshAnim()
-        : mNumKeys()
-        , mKeys()
-    {}
+    : mNumKeys()
+    , mKeys() {
+        // empty
+    }
 
-    ~aiMeshAnim()
-    {
+    ~aiMeshAnim() {
         delete[] mKeys;
     }
 
-#endif
+#endif // __cplusplus
 };
 
 // ---------------------------------------------------------------------------
 /** Describes a morphing animation of a given mesh. */
-struct aiMeshMorphAnim
-{
+struct aiMeshMorphAnim {
     /** Name of the mesh to be animated. An empty string is not allowed,
      *  animated meshes need to be named (not necessarily uniquely,
      *  the name can basically serve as wildcard to select a group
@@ -393,16 +393,16 @@ struct aiMeshMorphAnim
 #ifdef __cplusplus
 
     aiMeshMorphAnim()
-        : mNumKeys()
-        , mKeys()
-    {}
+    : mNumKeys()
+    , mKeys() {
+        // empty
+    }
 
-    ~aiMeshMorphAnim()
-    {
+    ~aiMeshMorphAnim() {
         delete[] mKeys;
     }
 
-#endif
+#endif // __cplusplus
 };
 
 // ---------------------------------------------------------------------------
