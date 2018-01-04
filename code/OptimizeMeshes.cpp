@@ -61,10 +61,10 @@ static const unsigned int DeadBeef = 0xdeadbeef;
 // ------------------------------------------------------------------------------------------------
 // Constructor to be privately used by Importer
 OptimizeMeshesProcess::OptimizeMeshesProcess()
-    : mScene()
-    , pts(false)
-    , max_verts( NotSet )
-    , max_faces( NotSet ) {
+: mScene()
+, pts(false)
+, max_verts( NotSet )
+, max_faces( NotSet ) {
     // empty
 }
 
@@ -76,9 +76,8 @@ OptimizeMeshesProcess::~OptimizeMeshesProcess() {
 
 // ------------------------------------------------------------------------------------------------
 // Returns whether the processing step is present in the given flag field.
-bool OptimizeMeshesProcess::IsActive( unsigned int pFlags) const
-{
-    // Our behaviour needs to be different if the SortByPType or SplitLargeMeshes
+bool OptimizeMeshesProcess::IsActive( unsigned int pFlags ) const {
+    // Our behavior needs to be different if the SortByPType or SplitLargeMeshes
     // steps are active. Thus we need to query their flags here and store the
     // information, although we're breaking const-correctness.
     // That's a serious design flaw, consider redesign.
@@ -87,13 +86,13 @@ bool OptimizeMeshesProcess::IsActive( unsigned int pFlags) const
         max_verts = ( 0 != ( pFlags & aiProcess_SplitLargeMeshes ) ) ? DeadBeef : max_verts;
         return true;
     }
+
     return false;
 }
 
 // ------------------------------------------------------------------------------------------------
 // Setup properties for the post-processing step
-void OptimizeMeshesProcess::SetupProperties(const Importer* pImp)
-{
+void OptimizeMeshesProcess::SetupProperties(const Importer* pImp) {
     if( max_verts == DeadBeef /* magic hack */ ) {
         max_faces = pImp->GetPropertyInteger(AI_CONFIG_PP_SLM_TRIANGLE_LIMIT,AI_SLM_DEFAULT_MAX_TRIANGLES);
         max_verts = pImp->GetPropertyInteger(AI_CONFIG_PP_SLM_VERTEX_LIMIT,AI_SLM_DEFAULT_MAX_VERTICES);

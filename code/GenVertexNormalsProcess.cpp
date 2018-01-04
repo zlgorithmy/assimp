@@ -128,7 +128,7 @@ bool GenVertexNormalsProcess::GenMeshVertexNormals (aiMesh* pMesh, unsigned int 
     pMesh->mNormals = new aiVector3D[pMesh->mNumVertices];
 
     // Compute per-face normals but store them per-vertex
-    for( unsigned int a = 0; a < pMesh->mNumFaces; a++)
+    for( unsigned int a = 0; a < pMesh->mNumFaces; ++a)
     {
         const aiFace& face = pMesh->mFaces[a];
         if (face.mNumIndices < 3)
@@ -155,10 +155,10 @@ bool GenVertexNormalsProcess::GenMeshVertexNormals (aiMesh* pMesh, unsigned int 
     // check whether we can reuse the SpatialSort of a previous step.
     SpatialSort* vertexFinder = NULL;
     SpatialSort  _vertexFinder;
-    ai_real posEpsilon = ai_real( 1e-5 );
-    if (shared) {
-        std::vector<std::pair<SpatialSort,ai_real> >* avf;
-        shared->GetProperty(AI_SPP_SPATIAL_SORT,avf);
+    ai_real posEpsilon( ai_real( 1e-5 ) );
+    if ( shared ) {
+        std::vector<std::pair<SpatialSort,ai_real> > *avf;
+        shared->GetProperty( AI_SPP_SPATIAL_SORT, avf );
         if (avf)
         {
             std::pair<SpatialSort,ai_real>& blubb = avf->operator [] (meshIndex);
@@ -189,17 +189,18 @@ bool GenVertexNormalsProcess::GenMeshVertexNormals (aiMesh* pMesh, unsigned int 
 
             aiVector3D pcNor;
             for (unsigned int a = 0; a < verticesFound.size(); ++a) {
-                const aiVector3D& v = pMesh->mNormals[verticesFound[a]];
-                if (is_not_qnan(v.x))pcNor += v;
+                const aiVector3D &v( pMesh->mNormals[ verticesFound[ a ] ] );
+                if ( is_not_qnan( v.x ) ) {
+                    pcNor += v;
+                }
             }
             pcNor.NormalizeSafe();
 
             // Write the smoothed normal back to all affected normals
-            for (unsigned int a = 0; a < verticesFound.size(); ++a)
-            {
-                unsigned int vidx = verticesFound[a];
-                pcNew[vidx] = pcNor;
-                abHad[vidx] = true;
+            for ( unsigned int a = 0; a < verticesFound.size(); ++a ) {
+                const unsigned int vidx( verticesFound[ a ] );
+                pcNew[ vidx ] = pcNor;
+                abHad[ vidx ] = true;
             }
         }
     }
@@ -212,18 +213,19 @@ bool GenVertexNormalsProcess::GenMeshVertexNormals (aiMesh* pMesh, unsigned int 
             vertexFinder->FindPositions( pMesh->mVertices[i] , posEpsilon, verticesFound);
 
             aiVector3D vr = pMesh->mNormals[i];
-            ai_real vrlen = vr.Length();
+            const ai_real vrlen( vr.Length() );
 
             aiVector3D pcNor;
             for (unsigned int a = 0; a < verticesFound.size(); ++a) {
-                aiVector3D v = pMesh->mNormals[verticesFound[a]];
+                const aiVector3D &v( pMesh->mNormals[ verticesFound[ a ] ] );
 
                 // check whether the angle between the two normals is not too large
                 // HACK: if v.x is qnan the dot product will become qnan, too
                 //   therefore the comparison against fLimit should be false
                 //   in every case.
-                if (v * vr >= fLimit * vrlen * v.Length())
+                if ( v * vr >= fLimit * vrlen * v.Length() ) {
                     pcNor += v;
+                }
             }
             pcNew[i] = pcNor.NormalizeSafe();
         }

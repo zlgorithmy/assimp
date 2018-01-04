@@ -119,6 +119,7 @@ static bool IsAsciiSTL(const char* buffer, unsigned int fileSize) {
     }
     return isASCII;
 }
+
 } // namespace
 
 // ------------------------------------------------------------------------------------------------
@@ -153,8 +154,7 @@ bool STLImporter::CanRead( const std::string& pFile, IOSystem* pIOHandler, bool 
     return false;
 }
 
-// ------------------------------------------------------------------------------------------------
-const aiImporterDesc* STLImporter::GetInfo () const {
+const aiImporterDesc* STLImporter::GetInfo() const {
     return &desc;
 }
 
@@ -171,15 +171,13 @@ void addFacesToMesh(aiMesh* pMesh)
     }
 }
 
-// ------------------------------------------------------------------------------------------------
-// Imports the given file into the given scene structure.
-void STLImporter::InternReadFile( const std::string& pFile, aiScene* pScene, IOSystem* pIOHandler )
+void STLImporter::InternReadFile( const std::string& filename, aiScene* pScene, IOSystem* pIOHandler )
 {
-    std::unique_ptr<IOStream> file( pIOHandler->Open( pFile, "rb"));
+    std::unique_ptr<IOStream> file( pIOHandler->Open( filename, "rb"));
 
     // Check whether we can read from the file
-    if( file.get() == NULL) {
-        throw DeadlyImportError( "Failed to open STL file " + pFile + ".");
+    if( nullptr == file.get() ) {
+        throw DeadlyImportError( "Failed to open STL file " + filename + ".");
     }
 
     fileSize = (unsigned int)file->FileSize();
@@ -205,7 +203,7 @@ void STLImporter::InternReadFile( const std::string& pFile, aiScene* pScene, IOS
     } else if (IsAsciiSTL(mBuffer, fileSize)) {
         LoadASCIIFile( pScene->mRootNode );
     } else {
-        throw DeadlyImportError( "Failed to determine STL storage representation for " + pFile + ".");
+        throw DeadlyImportError( "Failed to determine STL storage representation for " + filename + ".");
     }
 
     // create a single default material, using a white diffuse color for consistency with
@@ -411,13 +409,10 @@ bool STLImporter::LoadBinaryFile()
     const unsigned char* sz2 = (const unsigned char*)mBuffer;
     const unsigned char* const szEnd = sz2+80;
     while (sz2 < szEnd) {
-
-        if ('C' == *sz2++ && 'O' == *sz2++ && 'L' == *sz2++ &&
-            'O' == *sz2++ && 'R' == *sz2++ && '=' == *sz2++)    {
-
+        if ('C' == *sz2++ && 'O' == *sz2++ && 'L' == *sz2++ && 'O' == *sz2++ && 'R' == *sz2++ && '=' == *sz2++)    {
             // read the default vertex color for facets
             bIsMaterialise = true;
-            DefaultLogger::get()->info("STL: Taking code path for Materialise files");
+            DefaultLogger::get()->info("STL: Taking code path for Materialize files");
             const ai_real invByte = (ai_real)1.0 / ( ai_real )255.0;
             clrColorDefault.r = (*sz2++) * invByte;
             clrColorDefault.g = (*sz2++) * invByte;

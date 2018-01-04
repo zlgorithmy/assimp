@@ -72,16 +72,18 @@ using namespace Assimp;
 // ------------------------------------------------------------------------------------------------
 // Constructor to be privately used by Importer
 OptimizeGraphProcess::OptimizeGraphProcess()
-    : mScene()
-    , nodes_in()
-    , nodes_out()
-    , count_merged()
-{}
+: mScene()
+, nodes_in()
+, nodes_out()
+, count_merged() {
+    // empty
+}
 
 // ------------------------------------------------------------------------------------------------
 // Destructor, private as well
-OptimizeGraphProcess::~OptimizeGraphProcess()
-{}
+OptimizeGraphProcess::~OptimizeGraphProcess() {
+    // empty
+}
 
 // ------------------------------------------------------------------------------------------------
 // Returns whether the processing step is present in the given flag field.

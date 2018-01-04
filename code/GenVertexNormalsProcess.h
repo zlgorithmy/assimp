@@ -54,14 +54,11 @@ namespace Assimp {
 // ---------------------------------------------------------------------------
 /** The GenFaceNormalsProcess computes vertex normals for all vertizes
 */
-class ASSIMP_API GenVertexNormalsProcess : public BaseProcess
-{
+class ASSIMP_API GenVertexNormalsProcess : public BaseProcess {
 public:
-
     GenVertexNormalsProcess();
     ~GenVertexNormalsProcess();
 
-public:
     // -------------------------------------------------------------------
     /** Returns whether the processing step is present in the given flag.
     * @param pFlags The processing flags the importer was called with.

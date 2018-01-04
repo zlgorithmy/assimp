@@ -54,7 +54,8 @@ namespace Assimp {
  *  The function accepts an unconstrained template parameter for use with
  *  both aiVector3D and aiVector2D, but generally ignores the third coordinate.*/
 template <typename T>
-inline double GetArea2D(const T& v1, const T& v2, const T& v3)
+inline
+double GetArea2D(const T& v1, const T& v2, const T& v3)
 {
     return 0.5 * (v1.x * ((double)v3.y - v2.y) + v2.x * ((double)v1.y - v3.y) + v3.x * ((double)v2.y - v1.y));
 }
@@ -64,7 +65,8 @@ inline double GetArea2D(const T& v1, const T& v2, const T& v3)
  *  The function accepts an unconstrained template parameter for use with
  *  both aiVector3D and aiVector2D, but generally ignores the third coordinate.*/
 template <typename T>
-inline bool OnLeftSideOfLine2D(const T& p0, const T& p1,const T& p2)
+inline
+bool OnLeftSideOfLine2D(const T& p0, const T& p1,const T& p2)
 {
     return GetArea2D(p0,p2,p1) > 0;
 }
@@ -74,7 +76,8 @@ inline bool OnLeftSideOfLine2D(const T& p0, const T& p1,const T& p2)
  * The function accepts an unconstrained template parameter for use with
  *  both aiVector3D and aiVector2D, but generally ignores the third coordinate.*/
 template <typename T>
-inline bool PointInTriangle2D(const T& p0, const T& p1,const T& p2, const T& pp)
+inline
+bool PointInTriangle2D(const T& p0, const T& p1,const T& p2, const T& pp)
 {
     // Point in triangle test using baryzentric coordinates
     const aiVector2D v0 = p1 - p0;
@@ -184,9 +187,9 @@ inline bool IsCCW(T* in, size_t npoints) {
  *  @note The data arrays must have storage for at least num+2 elements. Using
  *  this method is much faster than the 'other' NewellNormal()
  */
-template <int ofs_x, int ofs_y, int ofs_z, typename TReal>
-inline void NewellNormal (aiVector3t<TReal>& out, int num, TReal* x, TReal* y, TReal* z)
-{
+template<int ofs_x, int ofs_y, int ofs_z, typename TReal>
+inline
+void NewellNormal (aiVector3t<TReal>& out, int num, TReal* x, TReal* y, TReal* z) {
     // Duplicate the first two vertices at the end
     x[(num+0)*ofs_x] = x[0];
     x[(num+1)*ofs_x] = x[ofs_x];
@@ -203,7 +206,7 @@ inline void NewellNormal (aiVector3t<TReal>& out, int num, TReal* x, TReal* y, T
     TReal *yptr = y +ofs_y, *ylow = y, *yhigh = y + ofs_y*2;
     TReal *zptr = z +ofs_z, *zlow = z, *zhigh = z + ofs_z*2;
 
-    for (int tmp=0; tmp < num; tmp++) {
+    for (int tmp=0; tmp < num; ++tmp ) {
         sum_xy += (*xptr) * ( (*yhigh) - (*ylow) );
         sum_yz += (*yptr) * ( (*zhigh) - (*zlow) );
         sum_zx += (*zptr) * ( (*xhigh) - (*xlow) );

@@ -98,14 +98,13 @@ namespace Assimp {
 
     /** will delete all registered importers. */
     void DeleteImporterInstanceList(std::vector< BaseImporter* >& out);
-} // namespace assimp
+} // Namespace Assimp
 
 
 #ifndef ASSIMP_BUILD_SINGLETHREADED
 /** Global mutex to manage the access to the log-stream map */
 static std::mutex gLogStreamMutex;
 #endif
-
 
 // ------------------------------------------------------------------------------------------------
 // Custom LogStream implementation for the C-API

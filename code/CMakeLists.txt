@@ -136,6 +136,7 @@ SET( Common_SRCS
   Hash.h
   Importer.cpp
   IFF.h
+  TKDTree.h
   MemoryIOWrapper.h
   ParsingUtils.h
   StreamReader.h

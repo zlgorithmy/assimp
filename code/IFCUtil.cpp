@@ -186,10 +186,7 @@ IfcVector3 TempMesh::ComputePolygonNormal(const IfcVector3* vtcs, size_t cnt, bo
 }
 
 // ------------------------------------------------------------------------------------------------
-void TempMesh::ComputePolygonNormals(std::vector<IfcVector3>& normals,
-    bool normalize,
-    size_t ofs) const
-{
+void TempMesh::ComputePolygonNormals(std::vector<IfcVector3>& normals, bool normalize, size_t ofs) const {
     size_t max_vcount = 0;
     std::vector<unsigned int>::const_iterator begin = vertcnt.begin()+ofs, end = vertcnt.end(),  iit;
     for(iit = begin; iit != end; ++iit) {
