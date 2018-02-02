@@ -158,7 +158,7 @@ namespace glTF2 {
         obj.AddMember("byteLength", static_cast<uint64_t>(b.byteLength), w.mAl);
 
         const auto uri = b.GetURI();
-        const auto relativeUri = uri.substr(uri.find_last_of("/\\") + uri.find_last_of("/") + 2u);
+        const auto relativeUri = uri.substr(uri.find_last_of("/") + 1u);
         obj.AddMember("uri", Value(relativeUri, w.mAl).Move(), w.mAl);
     }
 
