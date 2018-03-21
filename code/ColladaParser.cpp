@@ -3,7 +3,8 @@
 Open Asset Import Library (assimp)
 ---------------------------------------------------------------------------
 
-Copyright (c) 2006-2017, assimp team
+Copyright (c) 2006-2018, assimp team
+
 
 
 All rights reserved.
@@ -221,6 +222,7 @@ void ColladaParser::ReadStructure()
     }
 
 	PostProcessRootAnimations();
+    PostProcessControllers();
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -357,6 +359,21 @@ void ColladaParser::ReadAnimationClipLibrary()
 			break;
 		}
 	}
+}
+
+void ColladaParser::PostProcessControllers()
+{
+  for (ControllerLibrary::iterator it = mControllerLibrary.begin(); it != mControllerLibrary.end(); ++it)
+  {
+    std::string meshId = it->second.mMeshId;
+    ControllerLibrary::iterator findItr = mControllerLibrary.find(meshId);
+    while(findItr != mControllerLibrary.end()) {
+      meshId = findItr->second.mMeshId;
+      findItr = mControllerLibrary.find(meshId);
+    }
+    
+    it->second.mMeshId = meshId;
+  }
 }
 
 // ------------------------------------------------------------------------------------------------

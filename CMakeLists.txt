@@ -1,6 +1,7 @@
 # Open Asset Import Library (assimp)
 # ----------------------------------------------------------------------
-# Copyright (c) 2006-2017, assimp team
+# Copyright (c) 2006-2018, assimp team
+
 # All rights reserved.
 #
 # Redistribution and use of this software in source and binary forms,
@@ -213,7 +214,9 @@ IF ((CMAKE_C_COMPILER_ID MATCHES "GNU") AND NOT CMAKE_COMPILER_IS_MINGW)
 ELSEIF(MSVC)
   # enable multi-core compilation with MSVC
   add_compile_options(/MP)
-
+  if("${CMAKE_GENERATOR}" MATCHES "(Win64|IA64)")
+    add_compile_options( /bigobj )
+  endif()
   # disable "elements of array '' will be default initialized" warning on MSVC2013
   IF(MSVC12)
     add_compile_options(/wd4351)
@@ -226,6 +229,11 @@ ELSEIF( CMAKE_COMPILER_IS_MINGW )
   SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
   ADD_DEFINITIONS( -U__STRICT_ANSI__ )
 ENDIF()
+
+if (IOS)
+    set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -fembed-bitcode -O3")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fembed-bitcode -O3")
+endif()
 
 if (ASSIMP_COVERALLS)
     MESSAGE(STATUS "Coveralls enabled")

@@ -2,7 +2,8 @@
 Open Asset Import Library (assimp)
 ----------------------------------------------------------------------
 
-Copyright (c) 2006-2017, assimp team
+Copyright (c) 2006-2018, assimp team
+
 
 All rights reserved.
 
@@ -51,7 +52,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <tuple>
 
 #ifndef ASSIMP_BUILD_NO_COMPRESSED_IFC
-#   include <contrib/unzip/unzip.h>
+#   include <unzip.h>
 #endif
 
 #include "IFCLoader.h"
@@ -140,7 +141,8 @@ bool IFCImporter::CanRead( const std::string& pFile, IOSystem* pIOHandler, bool 
         // it is only unambiguous as long as we don't support any further
         // file formats with STEP as their encoding.
         const char* tokens[] = {"ISO-10303-21"};
-        return SearchFileHeaderForToken(pIOHandler,pFile,tokens,1);
+        const bool found( SearchFileHeaderForToken( pIOHandler, pFile, tokens, 1 ) );
+        return found;
     }
     return false;
 }
