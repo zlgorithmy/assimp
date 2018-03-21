@@ -1,8 +1,9 @@
-﻿/*
+/*
 Open Asset Import Library (assimp)
 ----------------------------------------------------------------------
 
-Copyright (c) 2006-2017, assimp team
+Copyright (c) 2006-2018, assimp team
+
 
 All rights reserved.
 
@@ -59,6 +60,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Header files, standard library.
 #include <memory>
 #include <inttypes.h>
+#include <dirent.h>
+#include <vector>
+#include <iostream>
 
 #include "glTF2AssetWriter.h"
 
@@ -66,6 +70,8 @@ using namespace rapidjson;
 
 using namespace Assimp;
 using namespace glTF2;
+
+using namespace std;
 
 namespace Assimp {
 
@@ -305,6 +311,58 @@ void glTF2Exporter::GetMatTexProp(const aiMaterial* mat, float& prop, const char
     mat->Get(textureKey.c_str(), tt, slot, prop);
 }
 
+void getFile(const string path, const string name, vector<string>& files)
+{
+    string dirname = path;
+    DIR *dp;  
+    struct dirent *dirp;  
+ 
+    if((dp = opendir(dirname.c_str())) == NULL)  
+        cout << "Can't open " << dirname << endl;  
+  
+    while((dirp = readdir(dp))!= NULL)
+    {
+        if(strcmp("..",dirp->d_name)==0 || strcmp(".",dirp->d_name)==0 || strcmp(".DS_Store",dirp->d_name)==0)
+        {
+            continue;
+        }
+        if(dirp->d_type == 8)//文件
+        {
+            if (strstr(dirp->d_name, name.c_str()))
+            {
+                string p = dirname;
+                files.push_back(p.append("/").append(dirp->d_name));
+            }
+        }
+        if(dirp->d_type == 4)//文件夹
+        {
+            string p = dirname;
+            string s = p.append("/").append(dirp->d_name);
+            getFile(s, name, files);
+        }
+    }
+  
+    closedir(dp); 
+}
+//获取name2相对name1的相对路径
+std::string getRelativePath(const std::string& name1, const std::string name2)
+{
+    if (name1.empty() || name2.empty()) {
+        return std::string("");
+    }
+    auto i = 0;
+
+    while (name1.at(i) == name2.at(i))++i;
+
+    std::string r = name1.substr(i);
+    std::string ret = "";
+    while (r.find('/') != -1) {
+        r = r.substr(0, r.find_last_of('/'));
+        ret.append("../");
+    }
+    ret.append(name2.substr(i));
+    return ret;
+}
 void glTF2Exporter::GetMatTex(const aiMaterial* mat, Ref<Texture>& texture, aiTextureType tt, unsigned int slot = 0)
 {
 
@@ -312,8 +370,44 @@ void glTF2Exporter::GetMatTex(const aiMaterial* mat, Ref<Texture>& texture, aiTe
         aiString tex;
 
         if (mat->Get(AI_MATKEY_TEXTURE(tt, slot), tex) == AI_SUCCESS) {
-            std::string path = tex.C_Str();
+            //std::string path = tex.C_Str();
+            //--------------------------------------------------------------------------tristan
+            std::string absolutePath = tex.C_Str();
+            auto texName = absolutePath.substr(absolutePath.find_last_of('/') + absolutePath.find_last_of('\\') + 2u);
 
+            vector<string> imgFile;
+            int t = string(mFilename).find("/novaby/");
+            
+            cout<<"t="<<t<<endl;
+            string novabyPath = "";
+            if(t!=-1){
+                novabyPath = string(mFilename).substr(0, t+7);//模型路径
+            }
+            else{
+                auto size = string(mFilename).find_last_of("/");
+                cout<<"size="<<size<<endl;
+                string p = string(mFilename).substr(0, size);
+                cout<<"p="<<p<<endl;
+                novabyPath = p.substr(0,p.find_last_of("/"));//模型路径
+            }
+            cout<<endl<<"novabyPath:"<<novabyPath<<endl;
+            cout<<"texName:"<<texName<<endl<<endl;
+
+            getFile(novabyPath, texName, imgFile);
+
+            //for(auto s:imgFile)
+            //{
+            //    cout<<s<<endl;
+            //}
+            if (imgFile.size() != 1)
+            {
+                printf("0 or >1 file named %s.\n", texName.c_str());
+                return;
+            }
+            
+            string path = getRelativePath(string(mFilename).substr(0, string(mFilename).find_last_of('/') + 1u), imgFile.at(0));
+            
+            //-------------------------------------------------------------------------
             if (path.size() > 0) {
                 if (path[0] != '*') {
                     std::map<std::string, unsigned int>::iterator it = mTexturesByPath.find(path);
@@ -708,8 +802,13 @@ void glTF2Exporter::ExportMeshes()
 		if (v) p.attributes.position.push_back(v);
 
 		/******************** Normals ********************/
+        // Normalize all normals as the validator can emit a warning otherwise
+        for (auto i = 0u; i < aim->mNumVertices; ++i) {
+            aim->mNormals[i].Normalize();
+        }
+
 		Ref<Accessor> n = ExportData(*mAsset, meshId, b, aim->mNumVertices, aim->mNormals, AttribType::VEC3, AttribType::VEC3, ComponentType_FLOAT);
-		if (n) p.attributes.normal.push_back(n);
+        if (n) p.attributes.normal.push_back(n);
 
 		/************** Texture coordinates **************/
         for (int i = 0; i < AI_MAX_NUMBER_OF_TEXTURECOORDS; ++i) {
